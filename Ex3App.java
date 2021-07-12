@@ -8,6 +8,7 @@ public class Ex3App {
 	
 	//Declaro el hashtable
 	static Hashtable <String,Double> productos = new Hashtable <String,Double>();
+	static Hashtable <String,Double> cantidades = new Hashtable <String,Double>();
 	
 	public static void listarProductos () {
 		
@@ -18,7 +19,9 @@ public class Ex3App {
 			
 			Double precio = productos.get(producto);
 			
-			System.out.println("Producto "+producto+", Precio "+precio);
+			Double cantidad = cantidades.get(producto);;
+			
+			System.out.println("Producto "+producto+", Precio "+precio+", Cantidad "+cantidad);
 		}
 	}
 	
@@ -26,17 +29,19 @@ public class Ex3App {
 		
 		//If que controla si el producto que buscas existe usando el .get
 		if(productos.get(producto_list) != null) {
-			System.out.println("Producto "+producto_list+", Precio "+productos.get(producto_list));
+			System.out.println("Producto "+producto_list+", Precio "+productos.get(producto_list)+", Cantidad "+cantidades.get(producto_list));
 		}else {
 			System.out.println("Producto no existente");
 		}
 
 	}
 	
-	public static void añadirProducto (String nombre_producto, Double precio_producto) {
+	public static void añadirProducto (String nombre_producto, Double precio_producto, Double cantidad_producto) {
 		
 		//Añado el producto usuando el .get
 		productos.put(nombre_producto, precio_producto);
+		
+		cantidades.put(nombre_producto,cantidad_producto);
 
 	}
 	
@@ -50,7 +55,10 @@ public class Ex3App {
 				System.out.println("Que precio tiene?");
 				Double precio_producto=teclado.nextDouble();
 				
-				añadirProducto(nombre_producto,precio_producto);
+				System.out.println("Cantidad?");
+				Double cantidad_producto=teclado.nextDouble();
+				
+				añadirProducto(nombre_producto,precio_producto,cantidad_producto);
 			break;
 			case 2:
 				listarProductos();
@@ -81,6 +89,17 @@ public class Ex3App {
 		productos.put("Fresas", 0.75);
 		productos.put("Nisperos", 0.75);
 		productos.put("Albaricoque", 0.75);
+		
+		cantidades.put("Naranjas", 10.0);
+		cantidades.put("Manzanas", 15.0);
+		cantidades.put("Sandias", 15.0);
+		cantidades.put("Melocoton", 10.0);
+		cantidades.put("Limon", 20.0);
+		cantidades.put("Peras", 20.0);
+		cantidades.put("Melon", 15.0);
+		cantidades.put("Fresas", 75.0);
+		cantidades.put("Nisperos", 35.0);
+		cantidades.put("Albaricoque", 30.0);
 		
 		int accion;
 		
