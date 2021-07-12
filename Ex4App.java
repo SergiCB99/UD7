@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class Ex4App {
 
 	static Hashtable <String,Double> productos = new Hashtable <String,Double>();
+	static Hashtable <String,Double> cantidades = new Hashtable <String,Double>();
 	
 	static Scanner teclado = new Scanner(System.in);
 	
@@ -21,84 +22,89 @@ public class Ex4App {
 			//La media la consigo usando el .get y el indice conseguido anteriormente
 			Double precio = productos.get(producto);
 			
-			System.out.println("Producto "+producto+", Precio "+precio);
+			Double cantidad = cantidades.get(producto);;
+			
+			System.out.println("Producto "+producto+", Precio "+precio+", Cantidad "+cantidad);
 		}
 	}
 	
 	public static void listarProducto (String producto_list) {
 		
 		if(productos.get(producto_list) != null) {
-			System.out.println("Producto "+producto_list+", Precio "+productos.get(producto_list));
+			System.out.println("Producto "+producto_list+", Precio "+productos.get(producto_list)+", Cantidad "+cantidades.get(producto_list));
 		}else {
 			System.out.println("Producto no existente");
 		}
 
 	}
 	
-	public static void añadirProducto (String nombre_producto, Double precio_producto) {
+	public static void añadirProducto (String nombre_producto, Double precio_producto, Double cantidad_producto) {
 		
 		productos.put(nombre_producto, precio_producto);
 
+		cantidades.put(nombre_producto,cantidad_producto);
+		
 	}
 	
 	public static void comprar () {
 		
 		ArrayList <Double> carro = new ArrayList<>();
+		ArrayList <Double> carroIVA = new ArrayList<>();
 		
 		boolean continuar = false;
 		
 		do {
 			
-			System.out.println("Introduce el nombre del producto");
-			String producto=teclado.next();
+			System.out.println("Introduce el precio del producto");
+			Double precio=teclado.nextDouble();
 			
-			//If que controla si el producto que quiere comprar existe
-			if(productos.get(producto) == null){
-				System.out.println("Producto no existente");	
-			}else {
-				carro.add(productos.get(producto));
+			carro.add(precio);
+			
+			System.out.println("Que IVA tiene este producto");
+			Double iva=teclado.nextDouble();
+			
+			carroIVA.add(precio+(precio*(iva/100)));
+			
+			System.out.println("Quieres añadir mas productos? [Si/No]");
+			String respuesta=teclado.next();
+			
+			if(respuesta.equals("No")) {
+				continuar = true;
+			}else if(respuesta.equals("Si")){
+				continuar = false;
 			}
-			
-				System.out.println("Quieres añadir mas productos? [Si/No]");
-				String respuesta=teclado.next();
-				
-				if(respuesta.equals("No")) {
-					continuar = true;
-				}else if(respuesta.equals("Si")){
-					continuar = false;
-				}
 			
 		}while(continuar==false);
 		
-		System.out.println("Que IVA tienen estos productos");
-		Double iva=teclado.nextDouble();
-		
-		iva = iva/100;
-		
+		//Sumo el total utilizando el iterator
 		Iterator<Double> it=carro.iterator();
 		Double total = 0.0;
 		while(it.hasNext()) {
 			total=total+it.next();
 		}
 		
-		Double precio_neto = (total+(total*iva));
+		Iterator<Double> itcIVA=carroIVA.iterator();
+		Double totalIVA = 0.0;
+		while(itcIVA.hasNext()) {
+			totalIVA=totalIVA+itcIVA.next();
+		}
 		
+		//Muestro la cantidad de productos utilizando el .size
 		System.out.println("Has comprado "+carro.size()+" productos con un coste bruto de "+total);
-		System.out.println("Coste neto (IVA "+iva+") "+precio_neto);
+		System.out.println("Coste neto "+totalIVA);
 		
 		System.out.println("Cuanto vas a pagar?");
 		Double dinero=teclado.nextDouble();
 		
 		do {
-			if(dinero>precio_neto) {
-				System.out.println("Has pagado "+dinero+" por la compra con precio "+precio_neto+" se te ha devuelto "+(dinero-precio_neto));
-			}else if(dinero==precio_neto){
-				System.out.println("Has pagado "+dinero+" por la compra con precio "+precio_neto);
+			if(dinero>totalIVA) {
+				System.out.println("Has pagado "+dinero+" por la compra con precio "+totalIVA+" se te ha devuelto "+(dinero-totalIVA));
+			}else if(dinero==totalIVA){
+				System.out.println("Has pagado "+dinero+" por la compra con precio "+totalIVA);
 			}else {
 				System.out.println("Cantidad insuficiente");
 			}
-		}while(dinero<(total+(total*iva)));
-		
+		}while(dinero<totalIVA);		
 	}
 	
 	public static void menu (int accion) {
@@ -111,7 +117,10 @@ public class Ex4App {
 			System.out.println("Que precio tiene?");
 			Double precio_producto=teclado.nextDouble();
 			
-			añadirProducto(nombre_producto,precio_producto);
+			System.out.println("Cantidad?");
+			Double cantidad_producto=teclado.nextDouble();
+			
+			añadirProducto(nombre_producto,precio_producto,cantidad_producto);
 		break;
 		case 2:
 			listarProductos();
@@ -144,6 +153,17 @@ public class Ex4App {
 		productos.put("Fresas", 0.75);
 		productos.put("Nisperos", 0.75);
 		productos.put("Albaricoque", 0.75);
+		
+		cantidades.put("Naranjas", 10.0);
+		cantidades.put("Manzanas", 15.0);
+		cantidades.put("Sandias", 15.0);
+		cantidades.put("Melocoton", 10.0);
+		cantidades.put("Limon", 20.0);
+		cantidades.put("Peras", 20.0);
+		cantidades.put("Melon", 15.0);
+		cantidades.put("Fresas", 75.0);
+		cantidades.put("Nisperos", 35.0);
+		cantidades.put("Albaricoque", 30.0);
 		
 		int accion;
 		
