@@ -10,6 +10,7 @@ public class Ex2App {
 
 		//Declaro el ArrayList
 		ArrayList <Double> carro = new ArrayList<>();
+		ArrayList <Double> carroIVA = new ArrayList<>();
 		
 		boolean continuar = false;
 		
@@ -19,6 +20,11 @@ public class Ex2App {
 			Double precio=teclado.nextDouble();
 			
 			carro.add(precio);
+			
+			System.out.println("Que IVA tiene este producto");
+			Double iva=teclado.nextDouble();
+			
+			carroIVA.add(precio+(precio*(iva/100)));
 			
 			System.out.println("Quieres añadir mas productos? [Si/No]");
 			String respuesta=teclado.next();
@@ -31,11 +37,6 @@ public class Ex2App {
 			
 		}while(continuar==false);
 		
-		System.out.println("Que IVA tienen estos productos");
-		Double iva=teclado.nextDouble();
-		
-		iva = iva/100;
-		
 		//Sumo el total utilizando el iterator
 		Iterator<Double> it=carro.iterator();
 		Double total = 0.0;
@@ -43,24 +44,28 @@ public class Ex2App {
 			total=total+it.next();
 		}
 		
-		Double precio_neto = (total+(total*iva));
+		Iterator<Double> itcIVA=carroIVA.iterator();
+		Double totalIVA = 0.0;
+		while(itcIVA.hasNext()) {
+			totalIVA=totalIVA+itcIVA.next();
+		}
 		
 		//Muestro la cantidad de productos utilizando el .size
 		System.out.println("Has comprado "+carro.size()+" productos con un coste bruto de "+total);
-		System.out.println("Coste neto (IVA "+iva+") "+precio_neto);
+		System.out.println("Coste neto "+totalIVA);
 		
 		System.out.println("Cuanto vas a pagar?");
 		Double dinero=teclado.nextDouble();
 		
 		do {
-			if(dinero>precio_neto) {
-				System.out.println("Has pagado "+dinero+" por la compra con precio "+precio_neto+" se te ha devuelto "+(dinero-precio_neto));
-			}else if(dinero==precio_neto){
-				System.out.println("Has pagado "+dinero+" por la compra con precio "+precio_neto);
+			if(dinero>totalIVA) {
+				System.out.println("Has pagado "+dinero+" por la compra con precio "+totalIVA+" se te ha devuelto "+(dinero-totalIVA));
+			}else if(dinero==totalIVA){
+				System.out.println("Has pagado "+dinero+" por la compra con precio "+totalIVA);
 			}else {
 				System.out.println("Cantidad insuficiente");
 			}
-		}while(dinero<precio_neto);
+		}while(dinero<totalIVA);
 		
 	}
 	
